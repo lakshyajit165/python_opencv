@@ -1,20 +1,27 @@
 import cv2
 
-detect = cv2.CascadeClassifier('./venv/lib/site-packages/cv2/data/haarcascade_frontalface_default.xml')
-# = cv2.VideoCapture("https://pixel.nymag.com/imgs/daily/vulture/2018/02/01/01-tom-cruise.w700.h700.jpg")
-cam = cv2.VideoCapture("https://ichef.bbci.co.uk/news/660/cpsprodpb/1453F/production/_101236238_avengers2.jpg")
+#create CascadeClassifier Object
+face_cascade = cv2.CascadeClassifier('./venv/lib/site-packages/cv2/data/haarcascade_frontalface_default.xml')
 
-check, img = cam.read()
+#Reading the image as it is
+img = cv2.imread('Tom.jpg')
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#Reading the image as grayscale image
+gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-face = detect.detectMultiScale(gray, 1.20, 5)
+#Search the co-ordinates of the image
+faces = face_cascade.detectMultiScale(gray_img, scaleFactor=1.5, minNeighbors=5)
 
-for x,y,w,h in face:
-    cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0), 2)
+print(type(faces))
+print(faces)
 
-cv2.imshow('Face', img)
+for x,y,w,h in faces:
+    img = cv2.rectangle(img, (x,y), (x+w, y+h), (0, 255, 0), 3)
+
+#resized = cv2.resize(img, int(img.shape[1])/2, int(img.shape[0])/2)
+
+cv2.imshow("Gray", img)
+
 cv2.waitKey(0)
 
-cam.release()
 cv2.destroyAllWindows()
